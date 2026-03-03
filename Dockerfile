@@ -11,4 +11,4 @@ RUN uv pip install --system --no-cache chuk-mcp-server>=0.4.4
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "python server.py --http --host 0.0.0.0 --port ${PORT:-8080}"]
+CMD ["python", "server.py", "--http", "--host", "0.0.0.0", "--port", "8080"]
