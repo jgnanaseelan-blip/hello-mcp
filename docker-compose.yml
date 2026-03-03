@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  hello-mcp:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - MCP_TRANSPORT=http
+    restart: unless-stopped

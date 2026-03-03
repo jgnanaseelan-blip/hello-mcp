@@ -1,0 +1,29 @@
+[project]
+name = "hello-mcp"
+version = "0.1.0"
+description = "MCP server built with ChukMCPServer"
+requires-python = ">=3.11"
+dependencies = [
+    "chuk-mcp-server>=0.4.4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "mypy>=1.8.0",
+    "ruff>=0.2.0",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
