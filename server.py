@@ -149,38 +149,41 @@ Include:
 
 if __name__ == "__main__":
     import argparse
-    import sys
 
-    # Parse command-line arguments
     parser = argparse.ArgumentParser(description="hello-mcp - MCP Server")
-    parser.add_argument("--stdio", action="store_true", help="Force STDIO transport mode")
+    # Added sse flag
+    parser.add_argument("--sse", action="store_true", help="Enable SSE transport mode")
     parser.add_argument("--http", action="store_true", help="Force HTTP transport mode")
-    parser.add_argument("--port", type=int, default=None, help="Port for HTTP mode")
-    parser.add_argument("--host", default=None, help="Host for HTTP mode")
+    parser.add_argument("--stdio", action="store_true", help="Force STDIO transport mode")
+    parser.add_argument("--port", type=int, default=8000, help="Port for HTTP/SSE mode")
+    parser.add_argument("--host", default="127.0.0.1", help="Host for HTTP/SSE mode")
     parser.add_argument("--debug", action="store_true", help="Enable debug logging")
     parser.add_argument(
         "--log-level",
-        default="warning",
+        default="info",
         choices=["debug", "info", "warning", "error", "critical"],
-        help="Logging level (default: warning)",
     )
-    parser.add_argument("--transport", choices=["stdio", "http"], help="Transport mode")
 
     args = parser.parse_args()
 
-    # Determine transport mode
-    if args.stdio or args.transport == "stdio":
-        # Stdio mode
-        run(transport="stdio", debug=args.debug, log_level=args.log_level)
-    elif args.http or args.port or args.host or args.transport == "http":
-        # HTTP mode
+    # Priority Logic for SSE
+    if args.sse:
+        print(f"Starting SSE server on http://{args.host}:{args.port}")
+        run(
+            transport="sse",
+            host=args.host,
+            port=args.port,
+            debug=args.debug,
+            log_level=args.log_level
+        )
+    elif args.http:
         run(
             transport="http",
             host=args.host,
             port=args.port,
             debug=args.debug,
-            log_level=args.log_level,
+            log_level=args.log_level
         )
     else:
-        # Default to stdio mode (best for Claude Desktop)
+        # Default to stdio for local Claude Desktop usage
         run(transport="stdio", log_level=args.log_level)
